@@ -128,11 +128,10 @@ func strdual(i interface{}) (string, error) {
             return "", fmt.Errorf("Invalid type")
         }
         return *s, nil
-    } else {
-        s, ok := i.(string)
-        if !ok {
-            return "", fmt.Errorf("Invalid type")
-        }
-        return s, nil
     }
+    s, ok := i.(string)
+    if !ok {
+        return "", fmt.Errorf("Invalid type")
+    }
+    return s, nil
 }
