@@ -7,11 +7,11 @@ import (
     "unicode/utf8"
 )
 
-type DIYValidator struct {
+type Validator struct {
     validator_funcs map[string]func(interface{}) error
 }
 
-func (vd *DIYValidator) Validate(o interface{}) error {
+func (vd *Validator) Validate(o interface{}) error {
     v := reflect.ValueOf(o)
     if v.Kind() == reflect.Ptr {
         v = v.Elem()
@@ -67,13 +67,13 @@ func (vd *DIYValidator) Validate(o interface{}) error {
     return nil
 }
 
-func (vd *DIYValidator) AddValidator(validator_name string,
+func (vd *Validator) Register(validator_name string,
     fn func(interface{}) error) {
     vd.validator_funcs[validator_name] = fn
 }
 
-func NewDIYValidator() *DIYValidator {
-    vd := DIYValidator{}
+func NewValidator() *Validator {
+    vd := Validator{}
     vd.validator_funcs = make(map[string]func(interface{}) error)
     return &vd
 }

@@ -5,14 +5,14 @@ import (
     "testing"
 )
 
-func TestDIYValidator_single_string_field(t *testing.T) {
-    vd := NewDIYValidator()
+func TestValidator_single_string_field(t *testing.T) {
+    vd := NewValidator()
 
     type Foo struct {
         Bar string `validate_as:"hello"`
     }
 
-    vd.AddValidator("hello", func(i interface{}) error {
+    vd.Register("hello", func(i interface{}) error {
         s, ok := i.(string)
         if !ok {
             return fmt.Errorf("Not a string")
@@ -36,8 +36,8 @@ func TestDIYValidator_single_string_field(t *testing.T) {
     }
 }
 
-func TestDIYValidator_not_nil(t *testing.T) {
-    vd := NewDIYValidator()
+func TestValidator_not_nil(t *testing.T) {
+    vd := NewValidator()
     type Foo struct {
         Bar *string `validate_as:"not_nil"`
     }
@@ -56,12 +56,12 @@ func TestDIYValidator_not_nil(t *testing.T) {
     }
 }
 
-func TestDIYValidator_skip_nil(t *testing.T) {
-    vd := NewDIYValidator()
+func TestValidator_skip_nil(t *testing.T) {
+    vd := NewValidator()
     type Foo struct {
         Bar *string `validate_as:"skip_nil,alwaysfail"`
     }
-    vd.AddValidator("alwaysfail", func(i interface{}) error {
+    vd.Register("alwaysfail", func(i interface{}) error {
         return fmt.Errorf("fail")
     })
 
@@ -72,8 +72,8 @@ func TestDIYValidator_skip_nil(t *testing.T) {
     }
 }
 
-func TestDIYValidator_undefined_validator(t *testing.T) {
-    vd := NewDIYValidator()
+func TestValidator_undefined_validator(t *testing.T) {
+    vd := NewValidator()
     type Foo struct {
         Bar string `validate_as:"name"`
     }
@@ -86,10 +86,10 @@ func TestDIYValidator_undefined_validator(t *testing.T) {
 
 // Extras
 
-func TestDIYValidator_StringLengthValidator(t *testing.T) {
-    vd := NewDIYValidator()
+func TestValidator_StringLengthValidator(t *testing.T) {
+    vd := NewValidator()
 
-    vd.AddValidator("shortstr", func(i interface{}) error {
+    vd.Register("shortstr", func(i interface{}) error {
         return ValidateStringLength(i, 1, 10)
     })
 
@@ -128,9 +128,9 @@ func TestDIYValidator_StringLengthValidator(t *testing.T) {
     }
 }
 
-func TestDIYValidator_ValidateStringExact(t *testing.T) {
-    vd := NewDIYValidator()
-    vd.AddValidator("arch", func(i interface{}) error {
+func TestValidator_ValidateStringExact(t *testing.T) {
+    vd := NewValidator()
+    vd.Register("arch", func(i interface{}) error {
         return ValidateStringExact(i, "x86", "x86_64")
     })
     type Foo struct {
