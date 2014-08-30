@@ -28,9 +28,12 @@ func (vd *Validator) Validate(o interface{}) error {
             continue
         }
         fieldval := v.Field(i).Interface()
-        validate_as_tag := strings.TrimSpace(t.Field(i).Tag.Get("validate_as"))
+        validate_as_tag := t.Field(i).Tag.Get("validate_as")
         if validate_as_tag == "" {
-            continue
+            validate_as_tag = t.Field(i).Tag.Get("valid")
+            if validate_as_tag == "" {
+                continue
+            }
         }
         validator_names := strings.Split(validate_as_tag, ",")
         for _, validator_name := range validator_names {

@@ -39,7 +39,7 @@ func TestValidator_single_string_field(t *testing.T) {
 func TestValidator_not_nil(t *testing.T) {
     vd := NewValidator()
     type Foo struct {
-        Bar *string `validate_as:"not_nil"`
+        Bar *string `valid:"not_nil"`
     }
 
     f := Foo{}
@@ -59,7 +59,7 @@ func TestValidator_not_nil(t *testing.T) {
 func TestValidator_skip_nil(t *testing.T) {
     vd := NewValidator()
     type Foo struct {
-        Bar *string `validate_as:"skip_nil,alwaysfail"`
+        Bar *string `valid:"skip_nil,alwaysfail"`
     }
     vd.Register("alwaysfail", func(i interface{}) error {
         return fmt.Errorf("fail")
